@@ -294,9 +294,12 @@ try{const s=JSON.parse(localStorage.getItem('zhvocab')||'null');if(s)S=Object.as
 const save=()=>{try{localStorage.setItem('zhvocab',JSON.stringify(S))}catch(e){}};
 const shuf=a=>{a=a.slice();for(let i=a.length;i>1;){const j=Math.random()*i--|0;[a[i],a[j]]=[a[j],a[i]]}return a};
 let VZ=[];const ld=()=>{VZ=speechSynthesis.getVoices()};try{ld();speechSynthesis.onvoiceschanged=ld}catch(e){}
-const say=t=>{try{const u=new SpeechSynthesisUtterance(t);u.lang='zh-CN';u.rate=.85;
-const v=VZ.find(v=>/^(zh|cmn)[-_]CN/i.test(v.lang))||VZ.find(v=>/^(zh|cmn)/i.test(v.lang));if(v)u.voice=v;
-speechSynthesis.cancel();setTimeout(()=>speechSynthesis.speak(u),60)}catch(e){}};
+let AU;
+const say=t=>{try{
+const v=VZ.find(v=>/^(zh|cmn)[-_]CN/i.test(v.lang))||VZ.find(v=>/^(zh|cmn)/i.test(v.lang));
+if(v){const u=new SpeechSynthesisUtterance(t);u.lang='zh-CN';u.rate=.85;u.voice=v;speechSynthesis.cancel();setTimeout(()=>speechSynthesis.speak(u),60)}
+else{if(AU)AU.pause();AU=new Audio('https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=zh-CN&q='+encodeURIComponent(t));AU.play().catch(()=>{})}
+}catch(e){}};
 const label=u=>'S'+u.replace('-','·U');
 const deck=()=>W.filter(w=>S.sel.includes(w.u)&&(!$('weak').checked||(S.known[w.id]||0)<2));
 let tab='card',q=[],qi=0,flip=false,score=[0,0],lock=false;
