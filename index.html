@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1f4fa3">
+<title>중국어 단어장</title>
+<style>
+:root{--bg:#f6f8fc;--card:#fff;--ink:#14233b;--sub:#5d6b82;--blue:#1f4fa3;--soft:#dde7f7;--ok:#1f8a5b;--no:#c0392b;--line:#d3dcec}
+@media(prefers-color-scheme:dark){:root{--bg:#0f1624;--card:#18223a;--ink:#eaf0fb;--sub:#9aa9c4;--blue:#7aa2ee;--soft:#22304f;--ok:#4cc38a;--no:#f0766a;--line:#2b3957}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Noto Sans KR",sans-serif;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
+main{max-width:520px;margin:0 auto;padding:14px}
+h1{font-size:19px;margin:4px 0 10px}
+.tabs{display:flex;gap:6px;margin-bottom:10px}
+.tabs button,.chip,.btn{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:9px 14px;font:inherit;cursor:pointer}
+.tabs button{flex:1}
+.tabs .on,.chip.on{background:var(--blue);border-color:var(--blue);color:#fff}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.chip{padding:5px 10px;font-size:13px}
+.opts{display:flex;gap:14px;font-size:14px;color:var(--sub);margin-bottom:10px;flex-wrap:wrap}
+.opts label{display:flex;gap:5px;align-items:center}
+.card{background:var(--card);border:2px solid var(--line);border-radius:18px;min-height:240px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;cursor:pointer;user-select:none}
+.hz{font:600 54px/1.2 "Songti SC","Noto Serif SC","Noto Serif KR",serif}
+.py{font-size:24px;color:var(--blue);margin-top:6px}
+.mn{font-size:22px;margin-top:6px}
+.tag{font-size:12px;color:var(--sub);margin-top:14px}
+.row{display:flex;gap:10px;margin-top:12px}
+.row .btn{flex:1;padding:14px;font-weight:600}
+.no{color:var(--no)}.ok{color:var(--ok)}
+.meta{display:flex;justify-content:space-between;color:var(--sub);font-size:14px;margin-bottom:6px}
+.q{font-size:26px;font-weight:600;text-align:center;margin:18px 0}
+.ans{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ans .btn{font:600 26px "Songti SC","Noto Serif SC",serif;padding:18px 6px}
+.ans .btn small{display:block;font:14px system-ui;color:var(--blue);min-height:20px}
+.ans .right{border-color:var(--ok);background:var(--soft)}.ans .wrong{border-color:var(--no)}
+input[type=search]{width:100%;padding:10px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);font:inherit;margin-bottom:8px}
+.li{display:flex;align-items:center;gap:10px;padding:10px 4px;border-bottom:1px solid var(--line);cursor:pointer}
+.li b{font:600 20px "Songti SC","Noto Serif SC",serif;min-width:92px}
+.li span{color:var(--blue);font-size:14px;min-width:96px}
+.li i{font-style:normal;color:var(--sub);font-size:14px}
+.stat{color:var(--sub);font-size:13px;text-align:center;margin-top:12px}
+.hide{display:none}
+</style>
+</head>
+<body>
+<main>
+<h1>중국어 단어장</h1>
+<div class="tabs" id="tabs"><button data-t="card" class="on">카드</button><button data-t="quiz">퀴즈</button><button data-t="list">목록</button></div>
+<div class="chips" id="chips"></div>
+<div class="opts">
+<label><input type="checkbox" id="weak"> 복습만(2번 미만 맞힌 단어)</label>
+<label><input type="checkbox" id="rev"> 뜻 먼저 보기</label>
+</div>
+<section id="card"></section>
+<section id="quiz" class="hide"></section>
+<section id="list" class="hide"></section>
+<div class="stat" id="stat"></div>
+</main>
+<script>
+const RAW=`#1-1
+粥|zhōu|죽
+汤|tāng|탕, 국
+茶|chá|차
+豆腐|dòufu|두부
+水|shuǐ|물
+咖啡|kāfēi|커피
+这是|zhè shì|이것은 ~이다
+和|hé|~와
+米饭|mǐfàn|쌀밥
+热|rè|뜨겁다
+#1-2
+一|yī|하나
+二|èr|둘
+三|sān|셋
+韩国人|hánguó rén|한국인
+美国人|měiguó rén|미국인
+中国人|zhōngguó rén|중국인
+日本人|rìběn rén|일본인
+你呢|nǐ ne|당신은요?
+嗨|hāi|하이
+我|wǒ|나
+#1-3
+你|nǐ|너
+对|duì|맞다
+不对|bú duì|아니다
+学生|xuéshēng|학생
+老师|lǎoshī|선생님
+律师|lǜshī|변호사
+医生|yīshēng|의사
+说|shuō|말하다
+中文|zhōngwén|중국어
+英文|yīngwén|영어
+#1-4
+他|tā|그
+她|tā|그녀
+大学生|dàxuéshēng|대학생
+课|kè|수업
+音乐|yīnyuè|음악
+音乐课|yīnyuè kè|음악 수업
+数学|shùxué|수학
+数学课|shùxué kè|수학 수업
+喜欢|xǐhuan|좋아하다
+上|shàng|(수업을) 듣다
+#1-5
+妈妈|māma|엄마
+爸爸|bàba|아빠
+老婆|lǎopo|아내
+老公|lǎogōng|남편
+女儿|nǚ'ér|딸
+儿子|érzi|아들
+加拿大|jiānádà|캐나다
+英国|yīngguó|영국
+我的|wǒ de|나의
+你的|nǐ de|너의
+#1-6
+书店|shūdiàn|서점
+超市|chāoshì|슈퍼마켓
+饭馆|fànguǎn|식당
+书|shū|책
+零食|língshí|간식
+菜|cài|요리
+买|mǎi|사다
+去|qù|가다
+吃|chī|먹다
+看|kàn|보다
+常常|chángcháng|자주
+#1-7
+牛奶|niúnǎi|우유
+奶茶|nǎichá|밀크티
+绿茶|lǜchá|녹차
+冰|bīng|얼음
+糖|táng|설탕
+谢谢|xièxie|감사합니다
+不客气|bú kèqi|천만에요
+要|yào|원하다
+需|xū|필요하다
+一杯|yì bēi|한 잔
+两杯|liǎng bēi|두 잔
+三杯|sān bēi|세 잔
+#1-8
+行李|xíngli|짐
+手机|shǒujī|핸드폰
+钱包|qiánbāo|지갑
+火车|huǒchē|기차
+车票|chēpiào|차표
+火车站|huǒchēzhàn|기차역
+站台|zhàntái|승강장
+洗手间|xǐshǒujiān|화장실
+这里|zhèlǐ|여기
+那里|nàlǐ|저기
+在|zài|있다(~에 있다)
+有|yǒu|있다(가지고 있다)
+哪里|nǎlǐ|어디
+哎呀|āiyā|아이고
+#1-9
+你好|nǐ hǎo|안녕하세요
+真的吗|zhēn de ma|정말요?
+同学|tóngxué|동급생
+叫|jiào|(이름을) ~라고 부르다
+今天|jīntiān|오늘
+历史|lìshǐ|역사
+新|xīn|새롭다
+我们|wǒmen|우리
+都|dōu|모두
+个人|gè rén|~명
+#1-10
+运动|yùndòng|운동
+篮球|lánqiú|농구
+排球|páiqiú|배구
+游泳|yóuyǒng|수영
+网球|wǎngqiú|테니스
+健身房|jiànshēnfáng|헬스장
+公园|gōngyuán|공원
+跑步|pǎobù|달리기
+非常|fēicháng|매우
+比较|bǐjiào|비교적
+你们|nǐmen|너희들
+还是|háishi|또는
+打|dǎ|(구기 종목을) 치다
+#2-1
+公寓|gōngyù|아파트
+房子|fángzi|집
+房间|fángjiān|방
+客厅|kètīng|거실
+厨房|chúfáng|부엌
+卧室|wòshì|침실
+床|chuáng|침대
+电视|diànshì|텔레비전
+桌子|zhuōzi|테이블
+冰箱|bīngxiāng|냉장고
+沙发|shāfā|소파
+哇|wā|와
+只有|zhǐyǒu|오직
+大|dà|크다
+小|xiǎo|작다
+漂亮|piàoliang|예쁘다
+旧|jiù|낡다
+乱|luàn|어지럽다
+舒服|shūfu|편안하다
+很|hěn|매우
+#2-2
+北京|běijīng|베이징
+春天|chūntiān|봄
+夏天|xiàtiān|여름
+秋天|qiūtiān|가을
+冬天|dōngtiān|겨울
+冷|lěng|춥다
+烤鸭|kǎoyā|오리구이
+火锅|huǒguō|훠궈
+老家|lǎojiā|고향
+动物园|dòngwùyuán|동물원
+故宫|gùgōng|자금성
+长城|chángchéng|만리장성
+好吃|hǎochī|맛있다
+特别|tèbié|특히
+辣|là|맵다
+时候|shíhou|~때
+有名|yǒumíng|유명하다
+好玩|hǎowán|재미있다(놀기 좋다)
+热闹|rènao|번화하다
+人们|rénmen|사람들
+远|yuǎn|멀다
+贵|guì|비싸다
+门票|ménpiào|입장권
+#2-3
+博物馆|bówùguǎn|박물관
+好的|hǎo de|좋아요
+空儿|kòngr|틈, 시간
+周末|zhōumò|주말
+蛋糕|dàngāo|케이크
+果汁|guǒzhī|주스
+水果|shuǐguǒ|과일
+喝|hē|마시다
+电影|diànyǐng|영화
+爱情|àiqíng|사랑
+晚饭|wǎnfàn|저녁밥
+饺子|jiǎozi|만두
+爆米花|bàomǐhuā|팝콘
+坐|zuò|타다, 앉다
+地铁|dìtiě|지하철
+公交车|gōngjiāochē|버스
+快|kuài|빠르다
+吧|ba|~하자
+做|zuò|~하다
+我家|wǒ jiā|우리 집
+#2-4
+西红柿|xīhóngshì|토마토
+多|duō|많다
+蔬菜|shūcài|채소
+擦|cā|닦다
+别|bié|~하지 마
+先|xiān|먼저
+洗碗|xǐ wǎn|설거지하다
+小心|xiǎoxīn|조심하다
+几个|jǐ ge|몇 개
+盘子|pánzi|접시
+别玩|bié wán|놀지 마
+现在|xiànzài|지금
+放|fàng|놓다
+盐|yán|소금
+冰淇淋|bīngqílín|아이스크림
+#2-5
+十|shí|10
+俱乐部|jùlèbù|동아리, 클럽
+喜剧|xǐjù|코미디
+有趣|yǒuqù|재미있다(흥미롭다)
+足球|zúqiú|축구
+踢足球|tī zúqiú|축구를 하다
+棒球|bàngqiú|야구
+一起|yìqǐ|함께
+会|huì|~할 줄 알다
+钢琴|gāngqín|피아노
+弹钢琴|tán gāngqín|피아노를 치다
+吉他|jítā|기타
+流行音乐|liúxíng yīnyuè|대중음악
+唱歌|chàng gē|노래를 부르다
+西班牙语|xībānyá yǔ|스페인어
+法语|fǎyǔ|프랑스어
+练习|liànxí|연습하다
+语言|yǔyán|언어
+种|zhǒng|종류
+饼干|bǐnggān|과자
+面条|miàntiáo|국수
+面包|miànbāo|빵
+烤|kǎo|굽다
+泰国|tàiguó|태국`;
+const W=[];let cu;
+RAW.split('\n').forEach(l=>{if(l[0]=='#')cu=l.slice(1);else if(l.trim()){const[h,p,m]=l.split('|');W.push({h,p,m,u:cu,id:cu+h})}});
+const U=[...new Set(W.map(w=>w.u))];
+const $=id=>document.getElementById(id);
+let S={sel:U.slice(),known:{},wrong:{}};
+try{const s=JSON.parse(localStorage.getItem('zhvocab')||'null');if(s)S=Object.assign(S,s)}catch(e){}
+const save=()=>{try{localStorage.setItem('zhvocab',JSON.stringify(S))}catch(e){}};
+const shuf=a=>{a=a.slice();for(let i=a.length;i>1;){const j=Math.random()*i--|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+const say=t=>{try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='zh-CN';u.rate=.85;speechSynthesis.speak(u)}catch(e){}};
+const label=u=>'S'+u.replace('-','·U');
+const deck=()=>W.filter(w=>S.sel.includes(w.u)&&(!$('weak').checked||(S.known[w.id]||0)<2));
+let tab='card',q=[],qi=0,flip=false,score=[0,0],lock=false;
+function chips(){$('chips').innerHTML='<button class="chip" data-a="all">전체</button>'+U.map(u=>`<button class="chip ${S.sel.includes(u)?'on':''}" data-u="${u}">${label(u)}</button>`).join('')}
+$('chips').onclick=e=>{const b=e.target.closest('button');if(!b)return;
+if(b.dataset.a)S.sel=S.sel.length==U.length?[]:U.slice();else{const u=b.dataset.u;S.sel=S.sel.includes(u)?S.sel.filter(x=>x!=u):[...S.sel,u]}
+save();chips();reset()};
+$('weak').onchange=$('rev').onchange=()=>reset();
+$('tabs').onclick=e=>{const b=e.target.closest('button');if(!b)return;tab=b.dataset.t;
+[...$('tabs').children].forEach(x=>x.classList.toggle('on',x==b));
+['card','quiz','list'].forEach(t=>$(t).classList.toggle('hide',t!=tab));reset()};
+function reset(){q=shuf(deck());qi=0;flip=false;score=[0,0];lock=false;render()}
+function render(){
+const d=deck();$('stat').textContent=`선택한 단어 ${d.length}개 · 전체 ${W.length}개 · 외운 단어 ${W.filter(w=>(S.known[w.id]||0)>=2).length}개`;
+if(tab=='card')card();else if(tab=='quiz')quiz();else list()}
+function empty(el){el.innerHTML='<p class="stat">표시할 단어가 없어요. 유닛을 고르거나 "복습만"을 꺼 보세요.</p>'}
+function card(){const el=$('card');if(!q.length)return empty(el);
+if(qi>=q.length){el.innerHTML=`<div class="card" id="again"><div class="mn">한 바퀴 끝!</div><div class="tag">탭해서 다시 시작</div></div>`;$('again').onclick=reset;return}
+const w=q[qi],rev=$('rev').checked;
+const front=rev?`<div class="mn">${w.m}</div>`:`<div class="hz">${w.h}</div>`;
+const back=rev?`<div class="hz">${w.h}</div><div class="py">${w.p}</div>`:`<div class="py">${w.p}</div><div class="mn">${w.m}</div>`;
+el.innerHTML=`<div class="meta"><span>${qi+1} / ${q.length}</span><span>${label(w.u)}</span></div>
+<div class="card" id="cd">${flip?back:front}<div class="tag">${flip?'':'탭해서 뒤집기'}</div></div>
+<div class="row"><button class="btn" id="sp">🔊 듣기</button></div>
+<div class="row"><button class="btn no" id="bn">몰라요</button><button class="btn ok" id="by">알아요</button></div>`;
+$('cd').onclick=()=>{flip=!flip;if(flip)say(w.h);card()};
+$('sp').onclick=()=>say(w.h);
+const next=k=>{if(k){S.known[w.id]=(S.known[w.id]||0)+1}else{S.known[w.id]=0;S.wrong[w.id]=(S.wrong[w.id]||0)+1;q.push(w)}save();qi++;flip=false;render()};
+$('bn').onclick=()=>next(0);$('by').onclick=()=>next(1)}
+function quiz(){const el=$('quiz'),d=deck();
+if(d.length<4)return el.innerHTML='<p class="stat">퀴즈는 단어가 4개 이상 필요해요.</p>';
+if(qi>=q.length){el.innerHTML=`<div class="card" id="again"><div class="mn">${score[0]} / ${score[0]+score[1]} 정답</div><div class="tag">탭해서 다시 시작</div></div>`;$('again').onclick=reset;return}
+const w=q[qi],opts=shuf([w,...shuf(W.filter(x=>x.id!=w.id&&x.h!=w.h)).slice(0,3)]);lock=false;
+el.innerHTML=`<div class="meta"><span>${qi+1} / ${q.length}</span><span>정답 ${score[0]}</span></div>
+<div class="q">${w.m}</div><div class="ans">${opts.map(o=>`<button class="btn" data-i="${o.id}">${o.h}<small></small></button>`).join('')}</div>`;
+el.querySelector('.ans').onclick=e=>{const b=e.target.closest('button');if(!b||lock)return;lock=true;
+const ok=b.dataset.i==w.id;
+el.querySelectorAll('button').forEach(x=>{const o=W.find(v=>v.id==x.dataset.i);x.querySelector('small').textContent=o.p;if(o.id==w.id)x.classList.add('right')});
+if(ok){score[0]++;S.known[w.id]=(S.known[w.id]||0)+1}else{score[1]++;b.classList.add('wrong');S.known[w.id]=0;S.wrong[w.id]=(S.wrong[w.id]||0)+1}
+save();say(w.h);setTimeout(()=>{qi++;render()},ok?900:1800)}}
+function list(){const el=$('list');
+el.innerHTML='<input type="search" id="sr" placeholder="한자, 병음, 뜻 검색">'+'<div id="lw"></div>';
+const draw=()=>{const t=$('sr').value.trim().toLowerCase();
+$('lw').innerHTML=deck().filter(w=>!t||(w.h+w.p+w.m).toLowerCase().includes(t)).map(w=>`<div class="li" data-h="${w.h}"><b>${w.h}</b><span>${w.p}</span><i>${w.m}</i></div>`).join('')||'<p class="stat">검색 결과가 없어요.</p>'};
+$('sr').oninput=draw;$('lw').onclick=e=>{const r=e.target.closest('.li');if(r)say(r.dataset.h)};draw()}
+chips();reset();
+</script>
+</body>
+</html>
