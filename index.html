@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#1f4fa3">
+<meta name="referrer" content="no-referrer">
 <title>중국어 단어장</title>
 <style>
 :root{--bg:#f6f8fc;--card:#fff;--ink:#14233b;--sub:#5d6b82;--blue:#1f4fa3;--soft:#dde7f7;--ok:#1f8a5b;--no:#c0392b;--line:#d3dcec}
@@ -295,11 +296,14 @@ const save=()=>{try{localStorage.setItem('zhvocab',JSON.stringify(S))}catch(e){}
 const shuf=a=>{a=a.slice();for(let i=a.length;i>1;){const j=Math.random()*i--|0;[a[i],a[j]]=[a[j],a[i]]}return a};
 let VZ=[];const ld=()=>{VZ=speechSynthesis.getVoices()};try{ld();speechSynthesis.onvoiceschanged=ld}catch(e){}
 let AU;
-const say=t=>{try{
-const v=VZ.find(v=>/^(zh|cmn)[-_]CN/i.test(v.lang))||VZ.find(v=>/^(zh|cmn)/i.test(v.lang));
-if(v){const u=new SpeechSynthesisUtterance(t);u.lang='zh-CN';u.rate=.85;u.voice=v;speechSynthesis.cancel();setTimeout(()=>speechSynthesis.speak(u),60)}
-else{if(AU)AU.pause();AU=new Audio('https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=zh-CN&q='+encodeURIComponent(t));AU.play().catch(()=>{})}
-}catch(e){}};
+const toast=m=>{let d=$('toast');if(!d){d=document.createElement('div');d.id='toast';d.style.cssText='position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#14233b;color:#fff;padding:9px 14px;border-radius:10px;font-size:14px;z-index:9';document.body.appendChild(d)}
+d.textContent=m;d.style.display='block';clearTimeout(d.t);d.t=setTimeout(()=>d.style.display='none',3500)};
+const speak=t=>{try{const v=VZ.find(v=>/^(zh|cmn)[-_]CN/i.test(v.lang))||VZ.find(v=>/^(zh|cmn)/i.test(v.lang));
+const u=new SpeechSynthesisUtterance(t);u.lang='zh-CN';u.rate=.85;if(v)u.voice=v;u.onerror=()=>toast('기기 음성을 재생하지 못했어요');
+speechSynthesis.cancel();setTimeout(()=>speechSynthesis.speak(u),60)}catch(e){toast('이 기기는 음성을 지원하지 않아요')}};
+const say=t=>{if(!/Android/i.test(navigator.userAgent))return speak(t);
+let done=0;const fb=()=>{if(done++)return;toast('온라인 음성을 못 불러와서 기기 음성을 써요');speak(t)};
+try{if(AU)AU.pause();AU=new Audio('https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=zh-CN&q='+encodeURIComponent(t));AU.onerror=fb;AU.play().catch(fb)}catch(e){fb()}};
 const label=u=>'S'+u.replace('-','·U');
 const deck=()=>W.filter(w=>S.sel.includes(w.u)&&(!$('weak').checked||(S.known[w.id]||0)<2));
 let tab='card',q=[],qi=0,flip=false,score=[0,0],lock=false;
