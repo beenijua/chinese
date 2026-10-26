@@ -243,7 +243,7 @@ const RAW=`#1-1
 公交车|gōngjiāochē|버스
 快|kuài|빠르다
 吧|ba|~하자
-做|zuò|~하다
+做|zuò|~하다, 만들다
 我家|wǒ jiā|우리 집
 #2-4
 西红柿|xīhóngshì|토마토
@@ -285,7 +285,45 @@ const RAW=`#1-1
 面条|miàntiáo|국수
 面包|miànbāo|빵
 烤|kǎo|굽다
-泰国|tàiguó|태국`;
+泰国|tàiguó|태국
+#2-6
+巧克力|qiǎokèlì|초콜릿
+不行|bù xíng|안 된다
+健康|jiànkāng|건강하다
+想|xiǎng|생각하다, ~하고 싶다
+玩具|wánjù|장난감
+狗|gǒu|개
+只|zhī / zhǐ|마리(동물) / 단지, ~만
+兔子|tùzi|토끼
+养|yǎng|기르다
+可爱|kě'ài|귀엽다
+商场|shāngchǎng|쇼핑몰
+姐姐|jiějie|언니, 누나
+哥哥|gēge|오빠, 형
+爷爷|yéye|할아버지
+朋友|péngyou|친구
+出去玩儿|chūqu wánr|나가서 놀다
+可以|kěyǐ|~해도 된다, ~할 수 있다
+电脑|diànnǎo|컴퓨터
+游戏|yóuxì|게임
+玩游戏|wán yóuxì|게임을 하다
+电脑游戏|diànnǎo yóuxì|컴퓨터 게임
+可乐|kělè|콜라
+冰可乐|bīng kělè|얼음 콜라
+好吃的|hǎochī de|맛있는 것
+借|jiè|빌리다, 빌려주다
+带|dài|가져오다, 데려오다
+给|gěi|~에게, 주다
+用|yòng|쓰다, 사용하다
+窗户|chuānghu|창문
+擦窗户|cā chuānghu|창문을 닦다
+休息|xiūxi|쉬다
+累|lèi|피곤하다
+扫|sǎo|쓸다
+扫地|sǎodì|바닥을 쓸다
+明白|míngbai|이해하다
+洗澡|xǐzǎo|샤워하다
+刷牙|shuāyá|양치하다`;
 const W=[];let cu;
 RAW.split('\n').forEach(l=>{if(l[0]=='#')cu=l.slice(1);else if(l.trim()){const[h,p,m]=l.split('|');W.push({h,p,m,u:cu,id:cu+h})}});
 const U=[...new Set(W.map(w=>w.u))];
