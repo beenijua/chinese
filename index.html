@@ -323,7 +323,32 @@ const RAW=`#1-1
 扫地|sǎodì|바닥을 쓸다
 明白|míngbai|이해하다
 洗澡|xǐzǎo|샤워하다
-刷牙|shuāyá|양치하다`;
+刷牙|shuāyá|양치하다
+#2-7
+邻居|línjū|이웃
+室友|shìyǒu|룸메이트
+找|zhǎo|찾다
+吵|chǎo|시끄럽다
+地方|dìfang|장소, 곳
+椅子|yǐzi|의자
+台灯|táidēng|스탠드
+书架|shūjià|책장
+重|zhòng|무겁다
+那个|nàge|저것, 그것
+帽子|màozi|모자
+衣服|yīfu|옷
+好看|hǎokàn|예쁘다, 보기 좋다
+还|hái|아직, 또한
+这些|zhèxiē|이것들
+勺子|sháozi|숟가락
+筷子|kuàizi|젓가락
+扔掉|rēngdiào|버리다, 치우다
+那些|nàxiē|저것들
+吸尘器|xīchénqì|진공청소기
+打扫|dǎsǎo|청소하다
+脏|zāng|더럽다
+拖把|tuōbǎ|대걸레
+东西|dōngxi|물건`;
 const W=[];let cu;
 RAW.split('\n').forEach(l=>{if(l[0]=='#')cu=l.slice(1);else if(l.trim()){const[h,p,m]=l.split('|');W.push({h,p,m,u:cu,id:cu+h})}});
 const U=[...new Set(W.map(w=>w.u))];
